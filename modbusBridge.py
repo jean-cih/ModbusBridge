@@ -6,6 +6,9 @@ import serial.tools.list_ports
 import socket
 import psutil
 
+R_0 = 1000
+a = 0.00385
+
 
 class PyModbusClientTCP:
     def __init__(self, host, port=502):
@@ -43,7 +46,6 @@ class PyModbusClientTCP:
         try:
             result = self.client.read_holding_registers(address=address, count=count,
                                                         device_id=slave_id)
-
             if result.isError():
                 raise ModbusException(f"Ошибка чтения регистров: {result}")
 
@@ -327,6 +329,23 @@ class GetInfo:
             print(f" - Не удалось подключиться к {host}:{port}: {e} - ")
             return False
 
+'''
+Регистры обмена по протоколу ModBus
+
+Параметр                           | Значение (ед. изм.)     | Адрес регистра | Тип доступа     | Формат данных
+---------------------------------------------------------------------------------------------------------------
+Тип датчика входа 1                | см. таблицу 6.4         | 4100 (0x1004)  | Чтение и запись | UINT 32
+Полоса фильтра входа 1             | 0…100                   | 4102 (0x1006)  | Чтение и запись | UINT 16
+Положение десятичной точки входа 1 | 0…7                     | 4103 (0x1007)  | Чтение и запись | UINT 16
+Сдвиг характеристики входа 1       | –10000…10000            | 4104 (0x1008)  | Чтение и запись | FLOAT 32
+Наклон характеристики входа 1      | –1…10                   | 4106 (0x100A)  | Чтение и запись | FLOAT 32
+AIN.H верхняя граница входа 1      | –10000…10000            | 4108 (0x100C)  | Чтение и запись | FLOAT 32
+AIN.L нижняя граница входа 1       | –10000…10000            | 4110 (0x100E)  | Чтение и запись | FLOAT 32
+Постоянная времени фильтра входа 1 | 0…65535                 | 4112 (0x1010)  | Чтение и запись | UINT 16
+Период измерения входа 1           | 600…10000 (миллисекунд) | 4113 (0x1011)  | Чтение и запись | UINT 16
+
+У меня тип датчика 35 - Pt1000 (α = 0,00385 °С-1)
+'''
 
 if __name__ == "__main__":
     print("\n === Программа для работы с протоколами Modbus TCP/RTU === \n")
@@ -336,7 +355,31 @@ if __name__ == "__main__":
         info = GetInfo()
         for interface in info.get_network_interfaces():
             print(info.get_interface_addresses(interface))
-        info.check_ethernet_connection("127.0.0.1", 502)
+        info.check_ethernet_connection("192.168.1.99", 502)
+        MB210_101 = PyModbusClientTCP("192.168.1.99", 502)
+        MB210_101.connect()
+        MB210_101.is_connected()
+        _, value0 = MB210_101.read_int(1, 4100)
+        print(value0)
+        _, value2 = MB210_101.read_int(1, 4102)
+        print(value2)
+        _, value3 = MB210_101.read_int(1, 4103)
+        print(value3)
+        _, value4 = MB210_101.read_float(1, 4104)
+        print(value4)
+        _, value6 = MB210_101.read_float(1, 4106)
+        print(value6)
+        _, value8 = MB210_101.read_float(1, 4108)
+        print(value8)
+        _, value10 = MB210_101.read_float(1, 4110)
+        print(value10)
+        _, value12 = MB210_101.read_int(1, 4112)
+        print(value12)
+        _, value13 = MB210_101.read_int(1, 4113)
+        print(value13)
+
+        # T = (R_t - R_0) / (R_0 * a)
+
     elif mb_protocol == '2':
         info = GetInfo()
         for port_name in info.get_ports_info():
