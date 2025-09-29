@@ -5,126 +5,145 @@ import struct
 import serial.tools.list_ports
 import socket
 import psutil
+from registers import registers_sensor
+from devices import devices
 
-R_0 = 1000
-a = 0.00385
+
+class ModbusBaseClient:
+    """Базовый класс для Modbus клиентов"""
+
+    def _read_registers(self, slave_id, address, count=2):
+        """Базовый метод чтения регистров"""
+        if not self.is_connected():
+            print("Нет соединения")
+            return False, None
+
+        try:
+            result = self.client.read_holding_registers(
+                address=address,
+                count=count,
+                device_id=slave_id
+            )
+
+            if result.isError():
+                raise ModbusException(f"Ошибка чтения регистров: {result}")
+
+            return True, result.registers
+
+        except Exception as e:
+            print(f"Ошибка чтения: {e}")
+            return False, None
+
+    def _write_registers(self, slave_id, address, registers):
+        """Базовый метод записи регистров"""
+        if not self.is_connected():
+            print("Нет соединения")
+            return False
+
+        try:
+            result = self.client.write_registers(
+                address=address,
+                values=registers,
+                device_id=slave_id
+            )
+
+            if result.isError():
+                raise ModbusException(f"Ошибка записи регистров: {result}")
+            return True
+
+        except Exception as e:
+            print(f"Ошибка записи: {e}")
+            return False
 
 
-class PyModbusClientTCP:
+class PyModbusClientTCP(ModbusBaseClient):
+    """Клиент Modbus TCP"""
+
     def __init__(self, host, port=502):
         self.host = host
         self.port = port
         self.client = None
 
     def connect(self):
+        """Установка соединения"""
         try:
             self.client = ModbusTcpClient(host=self.host, port=self.port)
             result = self.client.connect()
+
             if not result:
                 raise ModbusException(f"Не удалось подключиться к {self.host}:{self.port}")
 
             print(f"Успешное подключение к {self.host}:{self.port}")
             return True
+
         except Exception as e:
             print(f"Ошибка подключения: {e}")
             return False
 
     def is_connected(self):
+        """Проверка соединения"""
         if self.client is None:
             return False
+
         try:
             return self.client.is_socket_open()
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Ошибка проверки соединения: {e}")
             return False
 
     def read_int(self, slave_id, address, count=2):
-        if not self.is_connected():
-            print("Нет соединения")
+        """Чтение целочисленного значения"""
+        success, registers = self._read_registers(slave_id, address, count)
+
+        if not success or registers is None:
             return False, None
 
-        try:
-            result = self.client.read_holding_registers(address=address, count=count,
-                                                        device_id=slave_id)
-            if result.isError():
-                raise ModbusException(f"Ошибка чтения регистров: {result}")
+        value_int = 0
+        for i in range(count):
+            value_int |= registers[i] << (i * 16)
 
-            value_int = result.registers[1] << 16 | result.registers[0]
-            return True, value_int
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return False, None
+        return True, value_int
 
     def read_float(self, slave_id, address, count=2):
-        if not self.is_connected():
-            print("Нет соединения")
+        """Чтение значения с плавающей точкой"""
+        success, registers = self._read_registers(slave_id, address, count)
+
+        if not success or registers is None:
             return False, None
 
-        try:
-            result = self.client.read_holding_registers(address=address,count=count,
-                                                        device_id=slave_id)
-
-            if result.isError():
-                raise ModbusException(f"Ошибка чтения регистров: {result}")
-
-            value_float = struct.unpack('f', struct.pack('>HH', result.registers[1],
-                                                         result.registers[0]))[0]
-            return True, value_float
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return False, None
+        value_float = struct.unpack('f', struct.pack('>HH', registers[1], registers[0]))[0]
+        return True, value_float
 
     def write_int(self, slave_id, address, value_int):
-        if not self.is_connected():
-            print("Нет соединения")
-            return False
-
-        try:
-            registers = [(value_int & 0xFFFF), (value_int >> 16) & 0xFFFF]
-            result = self.client.write_registers(address=address, values=registers,
-                                                 device_id=slave_id)
-
-            if result.isError():
-                raise ModbusException(f"Ошибка записи регистров: {result}")
-            return True
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return False
+        """Запись целочисленного значения"""
+        registers = [(value_int & 0xFFFF), (value_int >> 16) & 0xFFFF]
+        return self._write_registers(slave_id, address, registers)
 
     def write_float(self, slave_id, address, value_float):
-        if not self.is_connected():
-            print("Нет соединения")
-            return False
-
-        try:
-            float_bytes = struct.pack('f', value_float)
-            registers = [struct.unpack('>H', float_bytes[2:4])[0],
-                         struct.unpack('>H', float_bytes[0:2])[0]]
-            result = self.client.write_registers(address=address, values=registers,
-                                                 device_id=slave_id)
-
-            if result.isError():
-                raise ModbusException(f"Ошибка записи регистров: {result}")
-            return True
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return False
+        """Запись значения с плавающей точкой"""
+        float_bytes = struct.pack('f', value_float)
+        registers = [
+            struct.unpack('>H', float_bytes[2:4])[0],
+            struct.unpack('>H', float_bytes[0:2])[0]
+        ]
+        return self._write_registers(slave_id, address, registers)
 
     def disconnect(self):
+        """Закрытие соединения"""
         try:
             if self.is_connected():
                 self.client.close()
-                print("Соединение закрыто")
+                print(f"\n{'=' * 50}")
+                print(" Соединение закрыто")
+                print(f"{'=' * 50}")
         except Exception as e:
             print(f"Ошибка закрытия: {e}")
 
 
-class PyModbusClientRTU:
-    def __inti__(self, port='COM4', baudrate=9600, bytesize=8, parity='N', stopbits=1):
+class PyModbusClientRTU(ModbusBaseClient):
+    """Клиент Modbus RTU"""
+
+    def __init__(self, port="COM4", baudrate=9600, bytesize=8, parity='N', stopbits=1):
         self.port = port
         self.baudrate = baudrate
         self.bytesize = bytesize
@@ -133,140 +152,117 @@ class PyModbusClientRTU:
         self.client = None
 
     def connect(self):
+        """Установка соединения"""
         try:
-            self.client = ModbusSerialClient(port=self.port, baudrate=self.baudrate,
-                                             bytesize=self.bytesize, parity=self.parity,
-                                             stopbits=self.stopbits)
+            self.client = ModbusSerialClient(
+                port=self.port,
+                baudrate=self.baudrate,
+                bytesize=self.bytesize,
+                parity=self.parity,
+                stopbits=self.stopbits
+            )
+
             result = self.client.connect()
             if not result:
-                raise serial.SerialException(f"Ощибка подключенияпо к порту {self.port}")
+                raise serial.SerialException(f"Ошибка подключения к порту {self.port}")
 
             print(f"Успешное подключение по {self.port}")
             return True
+
         except serial.SerialException as e:
-            print(f"Error: {e}")
+            print(f"Ошибка последовательного порта: {e}")
             return False
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Ошибка подключения: {e}")
             return False
 
-    def is_connected(self, address, slave_id):
+    def is_connected(self, address=0, slave_id=1):
+        """Проверка соединения"""
         if self.client is None:
             return False
 
         try:
-            result = self.client.read_holding_registers(address=address, count=1, device_id=slave_id)
+            result = self.client.read_holding_registers(
+                address=address,
+                count=1,
+                device_id=slave_id
+            )
             return not result.isError()
 
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Ошибка проверки соединения: {e}")
             return False
 
     def read_int(self, slave_id, address, count=2):
-        if not self.is_connected():
-            print("Нет соединения")
+        """Чтение целочисленного значения"""
+        success, registers = self._read_registers(slave_id, address, count)
+
+        if not success or registers is None:
             return False, None
 
-        try:
-            result = self.client.read_holding_registers(address=address, count=count,
-                                                        device_id=slave_id)
-
-            if result.isError():
-                raise ModbusException(f"Ошибка чтения регистров: {result}")
-
-            value_int = result.registers[1] << 16 | result.registers[0]
-            return True, value_int
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return False, None
+        value_int = registers[1] << 16 | registers[0]
+        return True, value_int
 
     def read_float(self, slave_id, address, count=2):
-        if not self.is_connected():
-            print("Нет соединения")
+        """Чтение значения с плавающей точкой"""
+        success, registers = self._read_registers(slave_id, address, count)
+
+        if not success or registers is None:
             return False, None
 
-        try:
-            result = self.client.read_holding_registers(address=address, count=count,
-                                                        device_id=slave_id)
-
-            if result.isError():
-                raise ModbusException(f"Ошибка чтения регистров: {result}")
-
-            value_float = struct.unpack('f', struct.pack('>HH', result.registers[1],
-                                                         result.registers[0]))[0]
-            return True, value_float
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return False, None
+        value_float = struct.unpack('f', struct.pack('>HH', registers[1], registers[0]))[0]
+        return True, value_float
 
     def write_int(self, slave_id, address, value_int):
-        if not self.is_connected():
-            print("Нет соединения")
-            return False
-
-        try:
-            registers = [(value_int & 0xFFFF), (value_int >> 16) & 0xFFFF]
-            result = self.client.write_registers(address=address, values=registers,
-                                                 device_id=slave_id)
-
-            if result.isError():
-                raise ModbusException(f"Ошибка записи регистров: {result}")
-            return True
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return False
+        """Запись целочисленного значения"""
+        registers = [(value_int & 0xFFFF), (value_int >> 16) & 0xFFFF]
+        return self._write_registers(slave_id, address, registers)
 
     def write_float(self, slave_id, address, value_float):
-        if not self.is_connected():
-            print("Нет соединения")
-            return False
-
-        try:
-            float_bytes = struct.pack('f', value_float)
-            registers = [struct.unpack('>H', float_bytes[2:4])[0],
-                         struct.unpack('>H', float_bytes[0:2])[0]]
-            result = self.client.write_registers(address=address, values=registers,
-                                                 device_id=slave_id)
-
-            if result.isError():
-                raise ModbusException(f"Ошибка записи регистров: {result}")
-            return True
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return False
+        """Запись значения с плавающей точкой"""
+        float_bytes = struct.pack('f', value_float)
+        registers = [
+            struct.unpack('>H', float_bytes[2:4])[0],
+            struct.unpack('>H', float_bytes[0:2])[0]
+        ]
+        return self._write_registers(slave_id, address, registers)
 
     def disconnect(self):
+        """Закрытие соединения"""
         try:
-            if self.is_connected():
+            if self.client:
                 self.client.close()
-                print("Соединение закрыто")
+                print(f"\n{'=' * 50}")
+                print(" Соединение закрыто")
+                print(f"{'=' * 50}")
         except Exception as e:
             print(f"Ошибка закрытия: {e}")
 
 
-class GetInfo:
-    def get_ports_info(self):
+class SystemInfo:
+    """Класс для получения системной информации"""
+
+    @staticmethod
+    def get_ports_info():
+        """Получение информации о COM портах"""
         try:
             ports = serial.tools.list_ports.comports()
-
             port_names = [port.name for port in ports]
+
             if not port_names:
-                print(" - COM порты не найдены - ")
+                print("📭 COM порты не найдены")
             else:
-                print(f"- Доступно портов для Modbus RTU: {len(port_names)} - {port_names} - ")
+                print(f"📡 Доступно портов для Modbus RTU: {len(port_names)} - {port_names}")
 
             return port_names
 
         except Exception as e:
-            print(f" - Ошибка опроса COM портов: {e} - ")
+            print(f"Ошибка опроса COM портов: {e}")
             return []
 
-
-    def get_port_settings(self, port_name):
+    @staticmethod
+    def get_port_settings(port_name):
+        """Получение настроек порта"""
         try:
             with serial.Serial(port_name) as ser:
                 settings = {
@@ -283,22 +279,28 @@ class GetInfo:
                 return settings
 
         except Exception as e:
-            print(f" - Ошибка получения настроек порта {port_name}: {e} - ")
+            print(f"Ошибка получения настроек порта {port_name}: {e}")
             return None
 
-    def get_network_interfaces(self):
+    @staticmethod
+    def get_network_interfaces():
+        """Получение списка сетевых интерфейсов"""
         interfaces = list(psutil.net_if_addrs().keys())
+
         if not interfaces:
-            print(" - Сетевые интерфейсы не найдены - ")
+            print("Сетевые интерфейсы не найдены")
         else:
-            print(f"- Доступные сетевые интерфейсы: {interfaces} -")
+            print(f"Доступные сетевые интерфейсы: {interfaces}")
+
         return interfaces
 
-    def get_interface_addresses(self, interface_name):
+    @staticmethod
+    def get_interface_addresses(interface_name):
+        """Получение адресов сетевого интерфейса"""
         try:
             interface_info = psutil.net_if_addrs().get(interface_name)
             if not interface_info:
-                print(f" - Информация об интерфейсе {interface_name} не найдена -")
+                print(f"Информация об интерфейсе {interface_name} не найдена")
                 return None
 
             for addr in interface_info:
@@ -310,83 +312,124 @@ class GetInfo:
                         'broadcast': addr.broadcast,
                     }
 
-            print(f" - IPv4 адреса не найдены для интерфейса {interface_name} -")
+            print(f"IPv4 адреса не найдены для интерфейса {interface_name}")
             return None
 
         except Exception as e:
-            print(f" - Ошибка получения информации об адресах для интерфейса {interface_name}: {e} - ")
+            print(f"Ошибка получения информации об адресах для {interface_name}: {e}")
             return None
 
-    def check_ethernet_connection(self, host, port, timeout=2):
+    @staticmethod
+    def check_ethernet_connection(host, port, timeout=2):
+        """Проверка Ethernet соединения"""
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(timeout)
             sock.connect((host, port))
             sock.close()
-            print(f" - Проверка соединения к {host}:{port} прошла успешно - ")
+            print(f"Проверка соединения к {host}:{port} прошла успешно")
             return True
         except Exception as e:
-            print(f" - Не удалось подключиться к {host}:{port}: {e} - ")
+            print(f"Не удалось подключиться к {host}:{port}: {e}")
             return False
 
-'''
-Регистры обмена по протоколу ModBus
 
-Параметр                           | Значение (ед. изм.)     | Адрес регистра | Тип доступа     | Формат данных
----------------------------------------------------------------------------------------------------------------
-Тип датчика входа 1                | см. таблицу 6.4         | 4100 (0x1004)  | Чтение и запись | UINT 32
-Полоса фильтра входа 1             | 0…100                   | 4102 (0x1006)  | Чтение и запись | UINT 16
-Положение десятичной точки входа 1 | 0…7                     | 4103 (0x1007)  | Чтение и запись | UINT 16
-Сдвиг характеристики входа 1       | –10000…10000            | 4104 (0x1008)  | Чтение и запись | FLOAT 32
-Наклон характеристики входа 1      | –1…10                   | 4106 (0x100A)  | Чтение и запись | FLOAT 32
-AIN.H верхняя граница входа 1      | –10000…10000            | 4108 (0x100C)  | Чтение и запись | FLOAT 32
-AIN.L нижняя граница входа 1       | –10000…10000            | 4110 (0x100E)  | Чтение и запись | FLOAT 32
-Постоянная времени фильтра входа 1 | 0…65535                 | 4112 (0x1010)  | Чтение и запись | UINT 16
-Период измерения входа 1           | 600…10000 (миллисекунд) | 4113 (0x1011)  | Чтение и запись | UINT 16
+class DeviceInfoReader:
+    """Класс для чтения информации с устройств"""
 
-У меня тип датчика 35 - Pt1000 (α = 0,00385 °С-1)
-'''
+    def __init__(self, slave_client):
+        self.slave = slave_client
 
-if __name__ == "__main__":
-    print("\n === Программа для работы с протоколами Modbus TCP/RTU === \n")
+    def get_sensor_info(self, channel, device_id):
+        """Получение информации с датчика по каналу"""
+        success, value_type = self.slave.read_int(device_id, registers_sensor[3]["address"] + 3 * (channel - 1), count=2)
 
-    mb_protocol = input("С каким протоколом нужно работать tcp/rtu: ").strip()
-    if mb_protocol == '1':
-        info = GetInfo()
-        for interface in info.get_network_interfaces():
-            print(info.get_interface_addresses(interface))
-        info.check_ethernet_connection("192.168.1.99", 502)
-        MB210_101 = PyModbusClientTCP("192.168.1.99", 502)
-        MB210_101.connect()
-        MB210_101.is_connected()
-        _, value0 = MB210_101.read_int(1, 4100)
-        print(value0)
-        _, value2 = MB210_101.read_int(1, 4102)
-        print(value2)
-        _, value3 = MB210_101.read_int(1, 4103)
-        print(value3)
-        _, value4 = MB210_101.read_float(1, 4104)
-        print(value4)
-        _, value6 = MB210_101.read_float(1, 4106)
-        print(value6)
-        _, value8 = MB210_101.read_float(1, 4108)
-        print(value8)
-        _, value10 = MB210_101.read_float(1, 4110)
-        print(value10)
-        _, value12 = MB210_101.read_int(1, 4112)
-        print(value12)
-        _, value13 = MB210_101.read_int(1, 4113)
-        print(value13)
+        if not success or value_type is None or value_type > 40:
+            print(f" - Канал {channel} не установлен - ")
+            return
 
-        # T = (R_t - R_0) / (R_0 * a)
+        print(f"\n == Канал {channel} == ")
 
-    elif mb_protocol == '2':
-        info = GetInfo()
-        for port_name in info.get_ports_info():
-            print(info.get_port_settings(port_name))
+        self._read_sensor_parameter(channel, 0, "float", device_id)
+        self._read_sensor_parameter(channel, 1, "int", device_id)
+        self._read_sensor_parameter(channel, 2, "int", device_id)
+        self._read_sensor_parameter(channel, 3, "int", device_id)
+
+    def _read_sensor_parameter(self, channel, param_index, data_type, device_id):
+        """Чтение параметра датчика"""
+        register = registers_sensor[param_index]
+        address = register["address"] + 3 * (channel - 1)
+
+        if data_type == "float":
+            success, value = self.slave.read_float(device_id, address, count=2)
+        else:
+            count = 2 if param_index == 3 else 1
+            success, value = self.slave.read_int(device_id, address, count=count)
+
+        if success:
+            print(f"  {register['name']} {channel}: {value}")
+        else:
+            print(f"  Ошибка чтения {register['name']}")
+
+
+def read_all_devices():
+    """Чтение данных со всех устройств"""
+    print("\n Чтение данных со всех устройств...")
+
+    for device in devices:
+        print(f"\n{'=' * 50}")
+        print(f" Устройство: {device.get('name', 'Unknown')}")
+        print(f"{'=' * 50}")
+
+        client = None
+        try:
+            if device["type"] == "tcp":
+                client = PyModbusClientTCP(device["ip"], device["port"])
+                if client.connect():
+                    info_reader = DeviceInfoReader(client)
+                    for channel in range(1, 9):
+                        info_reader.get_sensor_info(channel, device["device_id"])
+
+            elif device["type"] == "rtu":
+                client = PyModbusClientRTU(device["port"], device.get("baudrate", 9600))
+                if client.connect():
+                    pass
+
+            else:
+                print(f"Неизвестный тип устройства: {device['type']}")
+
+        except Exception as e:
+            print(f"Ошибка работы с устройством: {e}")
+
+        finally:
+            if client:
+                client.disconnect()
+
+
+
+def main():
+    """Основная функция программы"""
+    print("\n" + "=" * 60)
+    print(" === Программа для работы с протоколами Modbus TCP/RTU === ")
+    print("=" * 60)
+
+    read_all_devices()
+
+    print("\nИнтерактивный режим")
+    mb_protocol = input("Выберите протокол (tcp/rtu): ").strip().lower()
+
+    # Дальше может идти любая логика, не столь важно)
+    if mb_protocol == 'tcp':
+        print("\nРежим Modbus TCP")
+
+    elif mb_protocol == 'rtu':
+        print("\nРежим Modbus RTU")
+
     else:
-        print("Пока есть поддержка только двух протоколов...")
+        print("Поддерживаются только протоколы TCP и RTU")
 
     print("\n == Программа успешно завершилась == ")
 
 
+if __name__ == "__main__":
+    main()
