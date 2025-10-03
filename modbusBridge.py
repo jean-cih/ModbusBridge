@@ -5,7 +5,7 @@ import struct
 import serial.tools.list_ports
 import socket
 import psutil
-from registers import registers_sensor
+from registers import registers_sensor_MB210_101, registers_sensor_TPM10
 from devices import devices
 from typing import Tuple, Optional, List, Dict, NewType, Any
 
@@ -191,22 +191,22 @@ class PyModbusClientRTU(ModbusBaseClient):
             return True
 
         except serial.SerialException as e:
-            print(e)
+            print(f"Ошибка подключения Modbus: {e}")
             return False
         except Exception as e:
             print(f"Ошибка подключения: {e}")
             return False
 
-    def is_connected(self, address: int = 0, slave_id: int = 1) -> bool:
+    def is_connected(self) -> bool:
         """Проверка соединения"""
         if self.client is None:
             return False
 
         try:
             result = self.client.read_holding_registers(
-                address=address,
+                address=0,
                 count=1,
-                device_id=slave_id
+                device_id=devices[1]["device_id"]
             )
             return not result.isError()
 
@@ -273,9 +273,9 @@ class SystemInfo:
             port_names = [port.name for port in ports]
 
             if not port_names:
-                print("📭 COM порты не найдены")
+                print("COM порты не найдены")
             else:
-                print(f"📡 Доступно портов для Modbus RTU: {len(port_names)} - {port_names}")
+                print(f"Доступно портов для Modbus RTU: {len(port_names)} - {port_names}")
 
             return port_names
 
@@ -357,15 +357,30 @@ class SystemInfo:
             return False
 
 
-class DeviceInfoReader:
-    """Класс для чтения информации с устройств"""
-
+class InfoReader:
     def __init__(self, slave_client):
         self.slave = slave_client
 
+    def _read_sensor_parameter(self, address: int, data_type: str, device_id: int, count: int) -> None:
+        """Чтение параметра датчика"""
+
+        if data_type == "float":
+            success, value = self.slave.read_float(device_id, address, count=count)
+        else:
+            success, value = self.slave.read_int(device_id, address, count=count)
+
+        if success:
+            print(f"  {address}: {value}")
+        else:
+            print(f"  Ошибка чтения {address}")
+
+
+class InfoReaderMB210101(InfoReader):
+    """Класс для чтения информации с устройств"""
+
     def get_sensor_info(self, channel: int, device_id: int) -> bool:
         """Получение информации с датчика по каналу"""
-        success, value_type = self.slave.read_int(device_id, registers_sensor[3]["address"] + 3 * (channel - 1), count=2)
+        success, value_type = self.slave.read_int(device_id, registers_sensor_MB210_101[3]["address"] + 3 * (channel - 1), count=2)
 
         if not success or value_type is None or value_type > 40:
             print(f" - Канал {channel} не установлен - ")
@@ -373,62 +388,93 @@ class DeviceInfoReader:
 
         print(f"\n == Канал {channel} == ")
 
-        self._read_sensor_parameter(channel, 0, "float", device_id)
-        self._read_sensor_parameter(channel, 1, "int", device_id)
-        self._read_sensor_parameter(channel, 2, "int", device_id)
-        self._read_sensor_parameter(channel, 3, "int", device_id)
+        # Всегда можно добавить читаемые регистры
+        self._read_sensor_parameter(registers_sensor_MB210_101[0]["address"] + 3 * (channel - 1), "float", device_id, 2)
+        self._read_sensor_parameter(registers_sensor_MB210_101[1]["address"] + 3 * (channel - 1), "int", device_id, 1)
+        self._read_sensor_parameter(registers_sensor_MB210_101[2]["address"] + 3 * (channel - 1), "int", device_id, 1)
+
         return True
 
-    def _read_sensor_parameter(self, channel: int, param_index: int, data_type: str, device_id: int) -> None:
-        """Чтение параметра датчика"""
-        register = registers_sensor[param_index]
-        address = register["address"] + 3 * (channel - 1)
 
-        if data_type == "float":
-            success, value = self.slave.read_float(device_id, address, count=2)
-        else:
-            count = 2 if param_index == 3 else 1
-            success, value = self.slave.read_int(device_id, address, count=count)
+class InfoReaderTPM10(InfoReader):
+    """Класс для чтения информации с устройств"""
 
-        if success:
-            print(f"  {register['name']} {channel}: {value}")
-        else:
-            print(f"  Ошибка чтения {register['name']}")
+    def get_sensor_info(self, device_id: int) -> bool:
+        """Получение информации с датчика по каналу"""
+        success, value_type = self.slave.read_int(device_id, registers_sensor_TPM10[2]["address"], count=1)
 
+        if not success or value_type is None or value_type > 40:
+            print(f" - Датчик не установлен - ")
+            return False
+
+        print(f"\n == Датчик 1 == ")
+
+        # Всегда можно добавить читаемые регистры
+        self._read_sensor_parameter(registers_sensor_TPM10[0]["address"], "float", device_id, 2)
+        self._read_sensor_parameter(registers_sensor_TPM10[1]["address"], "float", device_id, 2)
+
+        return True
+
+
+def read_all_system_info() -> None:
+    """Чтение системных данных"""
+    print("\n Чтение системных данных...")
+
+    info = SystemInfo()
+    info.get_ports_info()
+    info.get_network_interfaces()
 
 def read_all_devices() -> None:
     """Чтение данных со всех устройств"""
     print("\n Чтение данных со всех устройств...")
 
     for device in devices:
+
+        name = device.get('name', 'Unknown')
         print(f"\n{'=' * 50}")
-        print(f" Устройство: {device.get('name', 'Unknown')}")
+        print(f" Устройство: {name}")
         print(f"{'=' * 50}")
 
-        client = None
-        try:
-            if device["type"] == "tcp":
-                client = PyModbusClientTCP(device["ip"], device["port"])
-                if client.connect():
-                    info_reader = DeviceInfoReader(client)
-                    for channel in range(1, 9):
-                        info_reader.get_sensor_info(channel, device["device_id"])
+        if name == "AnalogInputModul_TCP_Room1":
+            read_mb210_101(device)
+        elif name == "MeasureModuleMicroprocessor_RTU_Slave1":
+            read_tpm10(device)
+        else:
+            print(f"Для устройства {name} логика еще не прописана")
 
-            elif device["type"] == "rtu":
-                client = PyModbusClientRTU(device["port"], device.get("baudrate", 9600))
-                if client.connect():
-                    pass
 
-            else:
-                print(f"Неизвестный тип устройства: {device['type']}")
+def read_mb210_101(device: Dict[str, Any]) -> None:
+    """Логика для работы с MB210-101, он работает только по tcp"""
+    client = None
+    try:
+        client = PyModbusClientTCP(device["ip"], device["port"])
+        if client.connect():
+            info_reader = InfoReaderMB210101(client)
+            for channel in range(1, 9):
+                info_reader.get_sensor_info(channel, device["device_id"])
 
-        except Exception as e:
-            print(f"Ошибка работы с устройством: {e}")
+    except Exception as e:
+        print(f"Ошибка работы с устройством {device["name"]}: {e}")
+    finally:
+        if client:
+            client.disconnect()
 
-        finally:
-            if client:
-                client.disconnect()
+def read_tpm10(device: Dict[str, Any]) -> None:
+    """Логика для работы с TPM10, он работает только по rtu"""
+    client = None
+    try:
+        client = PyModbusClientRTU(device["port"], device.get("baudrate", 9600))
+        if client.connect():
+            # success, registers = client._read_registers(device["device_id"], 1, 2)
+            # print(registers)
+            info_reader = InfoReaderTPM10(client)
+            info_reader.get_sensor_info(device["device_id"])
 
+    except Exception as e:
+        print(f"Ошибка работы с устройством {device["name"]}: {e}")
+    finally:
+        if client:
+            client.disconnect()
 
 
 def main():
@@ -437,20 +483,8 @@ def main():
     print(" === Программа для работы с протоколами Modbus TCP/RTU === ")
     print("=" * 60)
 
+    read_all_system_info()
     read_all_devices()
-
-    print("\nИнтерактивный режим")
-    mb_protocol = input("Выберите протокол (tcp/rtu): ").strip().lower()
-
-    # Дальше может идти любая логика, не столь важно)
-    if mb_protocol == 'tcp':
-        print("\nРежим Modbus TCP")
-
-    elif mb_protocol == 'rtu':
-        print("\nРежим Modbus RTU")
-
-    else:
-        print("Поддерживаются только протоколы TCP и RTU")
 
     print("\n == Программа успешно завершилась == ")
 
