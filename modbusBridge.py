@@ -1,6 +1,5 @@
 from pymodbus.client import ModbusTcpClient, ModbusSerialClient
 from pymodbus.exceptions import ModbusException
-import serial
 import struct
 import serial.tools.list_ports
 import socket
@@ -8,6 +7,11 @@ import psutil
 from registers import registers_sensor_MB210_101, registers_sensor_TPM10
 from devices import devices
 from typing import Tuple, Optional, List, Dict, NewType, Any
+import time
+import os
+import platform
+import sys
+import msvcrt
 
 SlaveID = NewType('SlaveID', int)
 ModbusAddress = NewType('ModbusAddress', int)
@@ -110,18 +114,14 @@ class PyModbusClientTCP(ModbusBaseClient):
             print(f"Ошибка проверки соединения: {e}")
             return False
 
-    def read_int(self, slave_id: int, address: int, count: int = 2) -> Tuple[bool, Optional[int | None]]:
+    def read_int(self, slave_id: int, address: int, count: int = 1) -> Tuple[bool, Optional[int | None]]:
         """Чтение целочисленного значения"""
         success, registers = self._read_registers(slave_id, address, count)
 
         if not success or registers is None:
             return False, None
 
-        value_int = 0
-        for i in range(count):
-            value_int |= registers[i] << (i * 16)
-
-        return True, value_int
+        return True, registers[0]
 
     def read_float(self, slave_id: int, address: int, count: int = 2) -> Tuple[bool, Optional[float | None]]:
         """Чтение значения с плавающей точкой"""
@@ -135,7 +135,7 @@ class PyModbusClientTCP(ModbusBaseClient):
 
     def write_int(self, slave_id: int, address: int, value_int: int) -> bool:
         """Запись целочисленного значения"""
-        registers = [(value_int & 0xFFFF), (value_int >> 16) & 0xFFFF]
+        registers = [value_int & 0xFFFF]
         return self._write_registers(slave_id, address, registers)
 
     def write_float(self, slave_id: int, address: int, value_float: float) -> bool:
@@ -204,25 +204,25 @@ class PyModbusClientRTU(ModbusBaseClient):
 
         try:
             result = self.client.read_holding_registers(
-                address=0,
+                address=1,
                 count=1,
-                device_id=devices[1]["device_id"]
+                device_id=devices[0]["device_id"]
             )
+
             return not result.isError()
 
         except Exception as e:
             print(f"Ошибка проверки соединения: {e}")
             return False
 
-    def read_int(self, slave_id: int, address: int, count: int = 2) -> Tuple[bool, Optional[int | None]]:
+    def read_int(self, slave_id: int, address: int, count: int = 1) -> Tuple[bool, Optional[int | None]]:
         """Чтение целочисленного значения"""
         success, registers = self._read_registers(slave_id, address, count)
 
         if not success or registers is None:
             return False, None
 
-        value_int = registers[1] << 16 | registers[0]
-        return True, value_int
+        return True, registers[0]
 
     def read_float(self, slave_id: int, address: int, count: int = 2) -> Tuple[bool, Optional[float | None]]:
         """Чтение значения с плавающей точкой"""
@@ -236,7 +236,7 @@ class PyModbusClientRTU(ModbusBaseClient):
 
     def write_int(self, slave_id: int, address: int, value_int: int) -> bool:
         """Запись целочисленного значения"""
-        registers = [(value_int & 0xFFFF), (value_int >> 16) & 0xFFFF]
+        registers = [value_int & 0xFFFF]
         return self._write_registers(slave_id, address, registers)
 
     def write_float(self, slave_id: int, address: int, value_float: float) -> bool:
@@ -439,6 +439,8 @@ def read_all_devices() -> None:
             read_mb210_101(device)
         elif name == "MeasureModuleMicroprocessor_RTU_Slave1":
             read_tpm10(device)
+        elif name == "ElectroDynamometer_RTU":
+            constant_read_med(device)
         else:
             print(f"Для устройства {name} логика еще не прописана")
 
@@ -460,10 +462,10 @@ def read_mb210_101(device: Dict[str, Any]) -> None:
             client.disconnect()
 
 def read_tpm10(device: Dict[str, Any]) -> None:
-    """Логика для работы с TPM10, он работает только по rtu"""
+    """Логика для работы с TPM10, он работает только по rtu, rs 485"""
     client = None
     try:
-        client = PyModbusClientRTU(device["port"], device.get("baudrate", 9600))
+        client = PyModbusClientRTU(device["port"], device.get("baudrate", 9600), timeout=1)
         if client.connect():
             # success, registers = client._read_registers(device["device_id"], 1, 2)
             # print(registers)
@@ -476,11 +478,57 @@ def read_tpm10(device: Dict[str, Any]) -> None:
         if client:
             client.disconnect()
 
+def read_med(device: Dict[str, Any]) -> str | None:
+    """Логика для работы с НПО 'МЭД', он работает по rs 232"""
+    try:
+        with serial.Serial(device["port"], device["baudrate"], timeout=1) as ser:
+            data = ser.readline().decode('ascii').strip()
+            return data
+    except serial.SerialTimeoutException:
+        print(f"Таймаут при чтении из порта {device["port"]}")
+        return None
+    except serial.SerialException as e:
+        print(f"Ошибка при работе с портом {device["port"]}: {e}")
+        return None
+    except UnicodeDecodeError as e:
+        print(f"Ошибка декодирования данных: {e}")
+        return None
+
+
+def constant_read_med(device: Dict[str, Any]) -> None:
+    """Логика постоянного отслеживания данных НПО 'МЭД'"""
+    try:
+        while True:
+            # Выход по нажатию 'Enter'
+            if msvcrt.kbhit():
+                key = msvcrt.getch()
+                if key == b'\r':
+                    print()
+                    break
+
+            # Чтение данных с 'МЭД'
+            data = read_med(device)
+            if data:
+                print(f"Значение: {data}", end=" ")
+            else:
+                print(f"Устройство {device["name"]} отключено")
+                break
+
+            # Очистка стандартного вывода
+            time.sleep(0.1)
+            sys.stdout.write('\r')
+            sys.stdout.flush()
+
+    except KeyboardInterrupt as e:
+        print(f"\n\nЧтение прервано (Ctrl+C).")
+    except Exception as e:
+        print(f"Неожиданная ошибка: {e}")
+
 
 def main():
     """Основная функция программы"""
     print("\n" + "=" * 60)
-    print(" === Программа для работы с протоколами Modbus TCP/RTU === ")
+    print(" === Программа для работы по протоколам Modbus TCP/RTU === ")
     print("=" * 60)
 
     read_all_system_info()
