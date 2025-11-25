@@ -1,8 +1,8 @@
 devices = [
     # --- TCP-устройства на разных IP-адресах ---
     {
-        "name": "TemperatureSensor_TCP_Room1",
-        "ip": "192.168.1.10",      # Другой IP-адрес
+        "name": "AnalogInputModul_TCP_Room1",
+        "ip": "192.168.1.99",      # Другой IP-адрес
         "port": 502,
         "device_id": 1,           # Slave ID на этом TCP-сервере
         "type": "tcp"
@@ -52,18 +52,18 @@ devices = [
     },
     # --- Modbus RTU устройства на одном COM-порту, но с разными device_id (цепь) ---
     {
-        "name": "RelayModule_RTU_Slave1",
-        "port": "COM3",
-        "baudrate": 115200,
+        "name": "MeasureModuleMicroprocessor_RTU_Slave1",
+        "port": "COM5",
+        "baudrate": 9600,
         "bytesize": 8,
         "parity": 'N',
         "stopbits": 1,
-        "device_id": 1,
+        "device_id": 2,
         "type": "rtu"
     },
     {
         "name": "AnalogInput_RTU_Slave2",
-        "port": "COM3",
+        "port": "COM4",
         "baudrate": 115200,
         "bytesize": 7,
         "parity": 'E',
@@ -73,7 +73,7 @@ devices = [
     },
     {
         "name": "DigitalOutput_RTU_Slave3",
-        "port": "COM3",
+        "port": "COM4",
         "baudrate": 115200,
         "bytesize": 8,
         "parity": 'O',
@@ -87,5 +87,16 @@ devices = [
         "port": 10000,
         "device_id": 1,
         "type": "tcp"
+    },
+# --- Modbus RTU устройство-динамометр на COM-порту ---
+    {
+        "name": "ElectroDynamometer_RTU",
+        "port": "COM9",
+        "baudrate": 9600,
+        "bytesize": 8,
+        "parity": 'O',
+        "stopbits": 1,
+        "device_id": 1,
+        "type": "rtu"
     }
 ]
