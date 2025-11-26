@@ -2,7 +2,18 @@ from base import ModbusBaseClient
 from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ModbusException
 import struct
+import logging
 
+tcp_logger = logging.getLogger(__name__)
+tcp_logger.setLevel(logging.INFO)
+
+tcp_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w")
+tcp_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
+
+tcp_handler.setFormatter(tcp_formatter)
+tcp_logger.addHandler(tcp_handler)
+
+tcp_logger.info("== Логгирование класса Modbus TCP ==")
 
 class PyModbusClientTCP(ModbusBaseClient):
     """Клиент Modbus TCP"""
@@ -22,6 +33,7 @@ class PyModbusClientTCP(ModbusBaseClient):
                 raise ModbusException(f"Не удалось подключиться к {self.host}:{self.port}")
 
             print(f"Успешное подключение к {self.host}:{self.port}")
+            tcp_logger.info(f"Успешное подключение к {self.host}:{self.port}")
 
         except ModbusException:
             raise
@@ -45,6 +57,7 @@ class PyModbusClientTCP(ModbusBaseClient):
         if registers is None:
             raise ValueError("Данные с устройства не получены")
 
+        tcp_logger.info(f"read_int: данные получены: {registers[0]}")
         return registers[0]
 
     def read_float(self, slave_id: int, address: int, count: int = 2) -> float:
@@ -55,12 +68,20 @@ class PyModbusClientTCP(ModbusBaseClient):
             raise ValueError("Даные с устройства не получены")
 
         value_float = struct.unpack('f', struct.pack('>HH', registers[1], registers[0]))[0]
+        tcp_logger.info(f"read_float: данные получены: {value_float}")
         return value_float
 
     def write_int(self, slave_id: int, address: int, value_int: int) -> bool:
         """Запись целочисленного значения"""
         registers = [value_int & 0xFFFF]
-        return self._write_registers(slave_id, address, registers)
+        result = self._write_registers(slave_id, address, registers)
+
+        if result:
+            tcp_logger.info(f"write_int: успешная запись значения {value_int} в регистр {address} устройства {slave_id}")
+        else:
+            tcp_logger.error(f"write_int: ошибка записи значения {value_int} в регистр {address} устройства {slave_id}")
+
+        return result
 
     def write_float(self, slave_id: int, address: int, value_float: float) -> bool:
         """Запись значения с плавающей точкой"""
@@ -69,7 +90,14 @@ class PyModbusClientTCP(ModbusBaseClient):
             struct.unpack('>H', float_bytes[2:4])[0],
             struct.unpack('>H', float_bytes[0:2])[0]
         ]
-        return self._write_registers(slave_id, address, registers)
+        result = self._write_registers(slave_id, address, registers)
+
+        if result:
+            tcp_logger.info(f"write_int: успешная запись значения {value_float} в регистр {address} устройства {slave_id}")
+        else:
+            tcp_logger.error(f"write_int: ошибка записи значения {value_float} в регистр {address} устройства {slave_id}")
+
+        return result
 
     def disconnect(self):
         """Закрытие соединения"""
@@ -77,6 +105,7 @@ class PyModbusClientTCP(ModbusBaseClient):
             if self.client():
                 self.client.close()
                 print(f"Соединение с {self.host}:{self.port} закрыто")
+                tcp_logger.info(f"Соединение с {self.host}:{self.port} закрыто")
         except Exception as e:
             raise ModbusException(f"Ошибка закрытия: {e}") from e
         finally:
