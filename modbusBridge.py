@@ -8,10 +8,9 @@ from registers import registers_sensor_MB210_101, registers_sensor_TPM10
 from devices import devices
 from typing import Tuple, Optional, List, Dict, NewType, Any
 import time
-import os
-import platform
 import sys
 import msvcrt
+from exceptions import *
 
 SlaveID = NewType('SlaveID', int)
 ModbusAddress = NewType('ModbusAddress', int)
@@ -437,10 +436,6 @@ def read_all_devices() -> None:
             print(f"Для устройства {name} логика еще не прописана")
 
 
-class DeviceWorkError(Exception):
-    """Ошибка работы с устройством"""
-    pass
-
 def read_mb210_101(device: Dict[str, Any]) -> None:
     """Логика для работы с MB210-101, он работает только по tcp"""
     client = None
@@ -474,15 +469,6 @@ def read_tpm10(device: Dict[str, Any]) -> None:
     finally:
         if client:
             client.disconnect()
-
-
-class DeviceDisconnectedError(Exception):
-    """Устройство отключено или недоступно"""
-    pass
-
-class MonitoringStoppedError(Exception):
-    """Мониторинг остановлен по команде"""
-    pass
 
 
 def constant_read_med(device: Dict[str, Any]) -> None:
@@ -537,7 +523,7 @@ def main():
     except Exception as e:
         print(e)
     except KeyboardInterrupt:
-        print(f"\n\nЧтение прервано (Ctrl+C).")
+        print(f"\n\nЧтение прервано (Ctrl+C)")
 
     print("\n == Программа успешно завершилась == ")
 
