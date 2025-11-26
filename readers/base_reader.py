@@ -6,11 +6,8 @@ class InfoReader:
         """Чтение параметра датчика"""
 
         if data_type == "float":
-            success, value = self.slave.read_float(device_id, address, count=count)
+            value = self.slave.read_float(device_id, address, count=count)
         else:
-            success, value = self.slave.read_int(device_id, address, count=count)
+            value = self.slave.read_int(device_id, address, count=count)
 
-        if success:
-            print(f"  {address}: {value}")
-        else:
-            print(f"  Ошибка чтения {address}")
+        print(f"  {address}: {value}")
