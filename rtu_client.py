@@ -9,7 +9,7 @@ import logging
 rtu_logger = logging.getLogger(__name__)
 rtu_logger.setLevel(logging.INFO)
 
-rtu_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w")
+rtu_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w", encoding="utf-8")
 rtu_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
 
 rtu_handler.setFormatter(rtu_formatter)

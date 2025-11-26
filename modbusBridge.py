@@ -15,7 +15,7 @@ import logging
 mb_logger = logging.getLogger(__name__)
 mb_logger.setLevel(logging.INFO)
 
-mb_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w")
+mb_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w", encoding="utf-8")
 mb_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
 
 mb_handler.setFormatter(mb_formatter)

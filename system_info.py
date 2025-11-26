@@ -7,7 +7,7 @@ import logging
 sys_logger = logging.getLogger(__name__)
 sys_logger.setLevel(logging.INFO)
 
-sys_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w")
+sys_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w", encoding="utf-8")
 sys_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
 
 sys_handler.setFormatter(sys_formatter)

@@ -5,7 +5,7 @@ import logging
 bc_logger = logging.getLogger(__name__)
 bc_logger.setLevel(logging.INFO)
 
-bc_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w")
+bc_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w", encoding="utf-8")
 bc_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
 
 bc_handler.setFormatter(bc_formatter)

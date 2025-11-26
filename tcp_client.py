@@ -7,7 +7,7 @@ import logging
 tcp_logger = logging.getLogger(__name__)
 tcp_logger.setLevel(logging.INFO)
 
-tcp_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w")
+tcp_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w", encoding="utf-8")
 tcp_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
 
 tcp_handler.setFormatter(tcp_formatter)
