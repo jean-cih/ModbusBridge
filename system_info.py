@@ -3,18 +3,9 @@ import serial
 import socket
 import psutil
 import logging
+from Logger.logger import logged
 
-sys_logger = logging.getLogger(__name__)
-sys_logger.setLevel(logging.INFO)
-
-sys_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w", encoding="utf-8")
-sys_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-
-sys_handler.setFormatter(sys_formatter)
-sys_logger.addHandler(sys_handler)
-
-sys_logger.info("== Логгирование класса System Info ==")
-
+@logged(name="system_info", level=logging.DEBUG)
 class SystemInfo:
     """Класс для получения системной информации"""
 

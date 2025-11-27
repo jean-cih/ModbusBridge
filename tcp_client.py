@@ -3,18 +3,9 @@ from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ModbusException
 import struct
 import logging
+from Logger.logger import logged
 
-tcp_logger = logging.getLogger(__name__)
-tcp_logger.setLevel(logging.INFO)
-
-tcp_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w", encoding="utf-8")
-tcp_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-
-tcp_handler.setFormatter(tcp_formatter)
-tcp_logger.addHandler(tcp_handler)
-
-tcp_logger.info("== Логгирование класса Modbus TCP ==")
-
+@logged(name="tcp_client", level=logging.DEBUG)
 class PyModbusClientTCP(ModbusBaseClient):
     """Клиент Modbus TCP"""
 

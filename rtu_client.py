@@ -5,18 +5,9 @@ import serial
 import struct
 from config.devices import devices
 import logging
+from Logger.logger import logged
 
-rtu_logger = logging.getLogger(__name__)
-rtu_logger.setLevel(logging.INFO)
-
-rtu_handler = logging.FileHandler(f"log_status/{__name__}.log", mode="w", encoding="utf-8")
-rtu_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-
-rtu_handler.setFormatter(rtu_formatter)
-rtu_logger.addHandler(rtu_handler)
-
-rtu_logger.info("== Логгирование класса Modbus RTU ==")
-
+@logged(name="rtu_client", level=logging.DEBUG)
 class PyModbusClientRTU(ModbusBaseClient):
     """Клиент Modbus RTU"""
 
