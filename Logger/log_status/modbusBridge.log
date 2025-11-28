@@ -1,0 +1,215 @@
+2025-11-28 12:26:27,240 - modbusBridge - DEBUG - Вызов функции main с args: (), kwargs: {}
+2025-11-28 12:26:27,240 - modbusBridge - DEBUG - Вызов функции read_all_system_info с args: (), kwargs: {}
+2025-11-28 12:26:27,249 - modbusBridge - DEBUG - Функция read_all_system_info завершена успешно. Результат: None
+2025-11-28 12:26:27,249 - modbusBridge - DEBUG - Вызов функции read_all_devices с args: (), kwargs: {}
+2025-11-28 12:26:27,250 - modbusBridge - DEBUG - Вызов функции constant_read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:27,250 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:27,250 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:27,250 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:27,375 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    0.7KN
+2025-11-28 12:26:27,476 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:27,476 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:27,477 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:27,477 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:27,478 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:27,591 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.2KN
+2025-11-28 12:26:27,692 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:27,692 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:27,693 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:27,693 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:27,694 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:27,825 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.5KN
+2025-11-28 12:26:27,925 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:27,926 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:27,926 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:27,927 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:27,927 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:28,044 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.7KN
+2025-11-28 12:26:28,145 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:28,145 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:28,146 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:28,146 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:28,147 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:28,278 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.7KN
+2025-11-28 12:26:28,378 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:28,379 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:28,379 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:28,380 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:28,380 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:28,510 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.8KN
+2025-11-28 12:26:28,611 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:28,612 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:28,612 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:28,613 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:28,613 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:28,743 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.8KN
+2025-11-28 12:26:28,843 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:28,844 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:28,844 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:28,845 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:28,845 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:28,975 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.8KN
+2025-11-28 12:26:29,076 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:29,077 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:29,077 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:29,078 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:29,078 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:29,193 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.8KN
+2025-11-28 12:26:29,293 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:29,294 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:29,294 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:29,295 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:29,295 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:29,426 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.8KN
+2025-11-28 12:26:29,526 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:29,527 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:29,527 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:29,528 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:29,528 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:29,659 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.8KN
+2025-11-28 12:26:29,760 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:29,760 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:29,760 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:29,761 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:29,762 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:29,908 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.9KN
+2025-11-28 12:26:30,009 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:30,010 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:30,010 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:30,011 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:30,011 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:30,143 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.9KN
+2025-11-28 12:26:30,244 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:30,244 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:30,245 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:30,245 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:30,246 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:30,376 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.9KN
+2025-11-28 12:26:30,477 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:30,478 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:30,478 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:30,479 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:30,479 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:30,610 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.9KN
+2025-11-28 12:26:30,711 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:30,712 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:30,712 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:30,713 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:30,713 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:30,842 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.9KN
+2025-11-28 12:26:30,942 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:30,943 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:30,943 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:30,944 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:30,944 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:31,075 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.9KN
+2025-11-28 12:26:31,175 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:31,176 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:31,177 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:31,177 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:31,178 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:31,308 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.9KN
+2025-11-28 12:26:31,409 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:31,410 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:31,410 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:31,411 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:31,411 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:31,540 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.9KN
+2025-11-28 12:26:31,640 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:31,641 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:31,641 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:31,642 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:31,642 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:31,772 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.9KN
+2025-11-28 12:26:31,873 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:31,873 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:31,874 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:31,874 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:31,875 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:31,988 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.8KN
+2025-11-28 12:26:32,089 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:32,089 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:32,090 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:32,090 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:32,091 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:32,221 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS-    1.8KN
+2025-11-28 12:26:32,322 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:32,322 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:32,323 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:32,323 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:32,324 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:32,438 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.8KN
+2025-11-28 12:26:32,538 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:32,539 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:32,539 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:32,540 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:32,540 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:32,655 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.8KN
+2025-11-28 12:26:32,756 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:32,757 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:32,757 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:32,758 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:32,758 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:32,966 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS-    1.8KN
+2025-11-28 12:26:33,066 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:33,066 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:33,066 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:33,066 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:33,066 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:33,199 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS   335.5KN
+2025-11-28 12:26:33,300 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:33,300 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:33,301 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:33,301 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:33,302 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:33,523 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS   450.3KN
+2025-11-28 12:26:33,624 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:33,624 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:33,624 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:33,625 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:33,626 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:33,849 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS   450.3KN
+2025-11-28 12:26:33,949 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:33,950 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:33,950 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:33,951 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:33,951 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:34,172 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: US,GS   450.3KN
+2025-11-28 12:26:34,273 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:34,273 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:34,274 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:34,274 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:34,275 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:34,498 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS   450.3KN
+2025-11-28 12:26:34,599 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:34,600 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:34,600 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:34,601 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:34,601 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:34,825 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: ST,GS   450.3KN
+2025-11-28 12:26:34,925 - modbusBridge - DEBUG - Вызов функции _clean_stdout с args: (), kwargs: {}
+2025-11-28 12:26:34,926 - modbusBridge - DEBUG - Функция _clean_stdout завершена успешно. Результат: None
+2025-11-28 12:26:34,926 - modbusBridge - DEBUG - Вызов функции _stop_process с args: (), kwargs: {}
+2025-11-28 12:26:34,927 - modbusBridge - DEBUG - Функция _stop_process завершена успешно. Результат: False
+2025-11-28 12:26:34,927 - modbusBridge - DEBUG - Вызов функции _read_med с args: ({'name': 'ElectroDynamometer', 'port': 'COM9', 'baudrate': 9600, 'bytesize': 8, 'parity': 'O', 'stopbits': 1, 'device_id': 1, 'type': 'rtu'},), kwargs: {}
+2025-11-28 12:26:36,048 - modbusBridge - DEBUG - Функция _read_med завершена успешно. Результат: None
+2025-11-28 12:26:36,049 - modbusBridge - ERROR - Ошибка в функции constant_read_med: Устройство ElectroDynamometer отключено
+Traceback (most recent call last):
+  File "C:\Users\user\Job\Work\Modbus\Logger\logger.py", line 51, in wrapper
+    result = func(*args, **kwargs)
+  File "C:\Users\user\Job\Work\Modbus\modbusBridge.py", line 97, in constant_read_med
+    raise DeviceDisconnectedError(f"Устройство {device["name"]} отключено")
+exceptions.DeviceDisconnectedError: Устройство ElectroDynamometer отключено
+2025-11-28 12:26:36,054 - modbusBridge - ERROR - Ошибка в функции read_all_devices: Устройство ElectroDynamometer отключено
+Traceback (most recent call last):
+  File "C:\Users\user\Job\Work\Modbus\Logger\logger.py", line 51, in wrapper
+    result = func(*args, **kwargs)
+  File "C:\Users\user\Job\Work\Modbus\modbusBridge.py", line 43, in read_all_devices
+    constant_read_med(device)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\user\Job\Work\Modbus\Logger\logger.py", line 51, in wrapper
+    result = func(*args, **kwargs)
+  File "C:\Users\user\Job\Work\Modbus\modbusBridge.py", line 97, in constant_read_med
+    raise DeviceDisconnectedError(f"Устройство {device["name"]} отключено")
+exceptions.DeviceDisconnectedError: Устройство ElectroDynamometer отключено
+2025-11-28 12:26:36,055 - modbusBridge - DEBUG - Функция main завершена успешно. Результат: None

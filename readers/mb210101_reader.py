@@ -7,7 +7,7 @@ from Logger.logger import logged
 class InfoReaderMB210101(InfoReader):
     """Класс для чтения информации с устройств"""
     def __init__(self):
-        self.log.info("=== Инициализация объекта InfoReaderMB210101")
+        self.log.info("=== Инициализация объекта InfoReaderMB210101 ===")
 
     def get_sensor_info(self, channel: int, device_id: int) -> bool:
         """Получение информации с датчика по каналу"""

@@ -1,3 +1,5 @@
-system_info 2025-11-26 18:03:16,325 INFO == Логгирование класса System Info ==
-system_info 2025-11-26 18:03:16,388 INFO get_ports_info: Получение информации о COM портах: успешно
-system_info 2025-11-26 18:03:16,394 INFO get_network_interfaces: Получение настроек порта: успешно
+2025-11-28 12:26:27,240 - system_info - INFO - === Инициализация объекта SystemInfo ===
+2025-11-28 12:26:27,240 - system_info - DEBUG - Вызов функции get_ports_info с args: (), kwargs: {}
+2025-11-28 12:26:27,244 - system_info - DEBUG - Функция get_ports_info завершена успешно. Результат: ['COM9']
+2025-11-28 12:26:27,244 - system_info - DEBUG - Вызов функции get_network_interfaces с args: (), kwargs: {}
+2025-11-28 12:26:27,249 - system_info - DEBUG - Функция get_network_interfaces завершена успешно. Результат: ['vEthernet (Default Switch)', 'Ethernet', 'Ethernet 3', 'Loopback Pseudo-Interface 1']

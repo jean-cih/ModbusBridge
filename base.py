@@ -10,7 +10,7 @@ ModbusAddress = NewType('ModbusAddress', int)
 class ModbusBaseClient:
     """Базовый класс для Modbus клиентов"""
     def __init__(self):
-        self.log.info("Инициализация объекта ModbusBaseClient")
+        self.log.info("=== Инициализация объекта ModbusBaseClient ===")
 
     def _validate_slave_id(self, slave_id: int) -> SlaveID:
         self.log.debug("Валидация slave_id")

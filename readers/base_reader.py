@@ -4,8 +4,8 @@ from Logger.logger import logged
 @logged(name="base_reader", level=logging.DEBUG)
 class InfoReader:
     def __init__(self, slave_client):
-        self.slave = slave_client
         self.log.info("=== Инициализация объекта InfoReader ===")
+        self.slave = slave_client
 
     def _read_sensor_parameter(self, address: int, data_type: str, device_id: int, count: int) -> None:
         """Чтение параметра датчика"""
